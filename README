@@ -1,0 +1,89 @@
+# AI-Powered Student Performance Monitoring System
+
+An end-to-end machine learning dashboard that identifies **at-risk students**, explains *why* they are at risk using explainable AI (SHAP), analyzes student feedback sentiment, and provides actionable academic recommendations — all through an interactive **Streamlit** interface.
+
+---
+
+# Features
+
+-  **Student Performance Overview**
+  - Dataset exploration and at-risk distribution visualization
+-  **At-Risk Student Prediction**
+  - Random Forest classifier to identify low-performing (at-risk) students
+-  **Explainable AI (SHAP)**
+  - Feature-level explanations for individual student predictions
+-  **Sentiment Analysis**
+  - NLP-based sentiment scoring of student feedback using TextBlob
+-  **Academic Recommendations**
+  - Data-driven suggestions to improve engagement and performance
+-  **Performance Score Prediction**
+  - Regression model estimating relative performance based on engagement metrics
+-  **Academic Chatbot**
+  - Rule-based chatbot for quick insights into student data
+
+---
+
+# System Architecture
+
+Student Dataset
+↓
+Data Preprocessing & Encoding
+↓
+ML Models (Random Forest Classifier & Regressor)
+↓
+Explainability (SHAP)
+↓
+Streamlit Dashboard
+
+
+---
+
+# Machine Learning Models
+
+# Classification
+- **Model:** Random Forest Classifier  
+- **Target:** At-Risk Students (Low Performance)
+- **Why Random Forest?**
+  - Handles non-linear relationships
+  - Robust to noisy features
+  - Works well on structured educational data
+  - Compatible with SHAP for interpretability
+
+# Regression
+- **Model:** Random Forest Regressor  
+- **Target:** Engagement-based performance score (synthetic)
+
+---
+
+# Explainable AI (Why SHAP?)
+
+Educational predictions impact real students.  
+SHAP provides **transparent, per-student explanations**, ensuring:
+- Trust in predictions
+- Ethical decision support
+- Interpretability for educators
+
+ This system is designed as a **decision-support tool**, not an automated decision-maker.
+
+---
+
+##  Tech Stack
+
+- **Python**
+- **Streamlit**
+- **Scikit-learn**
+- **SHAP**
+- **Pandas / NumPy**
+- **TextBlob (NLP)**
+- **Matplotlib / Seaborn**
+- **Docker**
+
+---
+
+# Installation (Local)
+
+```bash
+git clone https://github.com/Yonashabtamucom/student-performance-dashboard.git
+cd student-performance-dashboard
+pip install -r requirements.txt
+streamlit run app.py
