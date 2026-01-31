@@ -1,0 +1,10 @@
+streamlit
+pandas
+numpy
+scikit-learn
+matplotlib
+seaborn
+shap
+textblob
+pip install -r requirements.txt
+streamlit run student-dashboard.py
