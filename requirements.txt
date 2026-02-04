@@ -5,6 +5,5 @@ scikit-learn==1.4.2
 matplotlib==3.8.4
 seaborn==0.13.2
 shap==0.44.1
-textblob==0.18.0
 joblib==1.4.2
-textblob
+textblob==0.18.0
