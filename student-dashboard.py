@@ -102,12 +102,33 @@ X_train, X_test, y_train, y_test = train_test_split(
 clf_model = RandomForestClassifier(n_estimators=100, random_state=42)
 clf_model.fit(X_train, y_train)
 y_pred = clf_model.predict(X_test)
+accuracy = clf_model.score(X_test, y_test)
+
 
 # ===============================
 # Streamlit Setup
 # ===============================
-st.sidebar.title("Student Academic Dashboard")
+st.set_page_config(
+    page_title="AI Student Dashboard",
+    page_icon="🎓",
+    layout="wide"
+)
+
+st.markdown("""
+<style>
+.main {
+    background-color: #f8fafc;
+}
+.block-container {
+    padding-top: 2rem;
+}
+</style>
+""", unsafe_allow_html=True)
+
 st.title("🎓 AI-Powered Student Support System")
+st.caption("Predict student risk • Explain AI • Analyze feedback")
+st.markdown("---")
+st.caption("© 2025 AI Student Support System | Internship Final Project")
 
 # ===============================
 # LOGIN CHECK
@@ -164,20 +185,38 @@ else:
 # ===============================
     # OVERVIEW
     # ===============================
-
     if choice == "Overview":
+      st.subheader("📊 Dashboard Overview")
+      total_students = len(df)
+      at_risk = df['at_risk'].sum()
+      safe = total_students - at_risk
+      col1, col2, col3 = st.columns(3)
+      col1.metric("👥 Total Students", total_students)
+      col2.metric("⚠️ At Risk", at_risk)
+      col3.metric("✅ Safe Students", safe)
+      st.markdown("---")
+      colA, colB = st.columns([2,1])
+      with colA:
+          st.subheader("Student Distribution")
+          fig, ax = plt.subplots()
+          sns.countplot(x="at_risk", data=df, ax=ax)
+          st.pyplot(fig)
+      with colB:
+          st.subheader("System Info")
+          st.info("""
+          This AI system helps identify at-risk students early.
+        
+         Features:
+            - AI Prediction
+            - Explainable AI
+            - User Management
+            - Chatbot Assistant
+        """)
+          
+      col4 = st.columns(4)[3]
+      col4.metric("Model Accuracy", f"{accuracy:.2%}")
 
-        st.subheader("Dataset Overview")
 
-        st.dataframe(df.head())
-
-        st.write("Total Students:", len(df))
-        st.write("At Risk Students:", df["at_risk"].sum())
-
-        fig, ax = plt.subplots()
-        sns.countplot(x= "at_risk", data=df, ax=ax)
-        st.pyplot(fig)
-    
 # ===============================
 # At-Risk Students Section
 # ===============================
