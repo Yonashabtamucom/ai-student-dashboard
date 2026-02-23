@@ -1,3 +1,4 @@
+import os
 import streamlit as st
 import pandas as pd
 from sklearn.model_selection import train_test_split
@@ -38,7 +39,7 @@ def logout():
     st.session_state.user = None
     st.rerun()
 def register_user():
-
+  
     st.subheader("Create New User")
 
     username = st.text_input("New Username")
@@ -60,10 +61,9 @@ def register_user():
 
             st.error("Username already exists")
 
-# ===============================
+# ===============================    
 # Load Dataset
 # ===============================
-import os
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_PATH = os.path.join(BASE_DIR, "xAPI-Edu-Data.csv")
 df = pd.read_csv(DATA_PATH)
@@ -113,6 +113,7 @@ st.set_page_config(
     page_icon="🎓",
     layout="wide"
 )
+
 
 st.markdown("""
 <style>
@@ -194,6 +195,8 @@ else:
       col1.metric("👥 Total Students", total_students)
       col2.metric("⚠️ At Risk", at_risk)
       col3.metric("✅ Safe Students", safe)
+      col4 = st.columns(4)[3]
+      col4.metric("Model Accuracy", f"{accuracy:.2%}")
       st.markdown("---")
       colA, colB = st.columns([2,1])
       with colA:
@@ -201,7 +204,7 @@ else:
           fig, ax = plt.subplots()
           sns.countplot(x="at_risk", data=df, ax=ax)
           st.pyplot(fig)
-      with colB:
+      with colB: 
           st.subheader("System Info")
           st.info("""
           This AI system helps identify at-risk students early.
@@ -213,10 +216,6 @@ else:
             - Chatbot Assistant
         """)
           
-      col4 = st.columns(4)[3]
-      col4.metric("Model Accuracy", f"{accuracy:.2%}")
-
-
 # ===============================
 # At-Risk Students Section
 # ===============================
@@ -297,6 +296,8 @@ else:
            if feedback_list and feedback_list[0] != "":
                sentiments = [TextBlob(f).sentiment.polarity for f in feedback_list]
                feedback_df = pd.DataFrame({'feedback': feedback_list, 'sentiment': sentiments})
+               feedback_df['label'] = feedback_df['sentiment'].apply(
+                                lambda x: "Positive" if x > 0 else "Negative" if x < 0 else "Neutral")
                st.dataframe(feedback_df)
 
                st.subheader("Sentiment Distribution")
@@ -308,22 +309,45 @@ else:
 # Recommendations Section
 # ===============================
     elif choice == "Recommendations":
-         st.subheader("🎯 Student Recommendations")
+        st.subheader("🎯 Personalized Student Recommendations")
+         # select student index
+        student_index = st.number_input(
+               "Select student index",
+                 min_value=0,
+                 max_value=len(df)-1,
+                 value=0)
+        student = df.iloc[student_index]
+        st.write("### Selected Student Data")
+        st.dataframe(student.to_frame())
+        recommendations = []
+        # Rule 1: Low participation
+        if student["raisedhands"] < 10:
+            recommendations.append("Encourage student to participate more in class.")
 
-         st.write("""
-               Based on data patterns, students tend to struggle when:
-             - They have low 'raisedhands' counts (less engagement)
-             - They visit few 'Resources'
-             - They are frequently absent ('StudentAbsenceDays' is high)
-             """)
+    # Rule 2: Low resource usage
+        if student["VisITedResources"] < 10:
+            recommendations.append("Recommend student to use more learning materials.")
 
-         st.markdown("**📘 Recommendations:**")
-         st.write("""
-                1. Encourage classroom participation.
-                2. Motivate use of digital learning resources.
-                3. Offer counseling or mentoring for high-absence students.
-                4. Communicate with parents to improve satisfaction and involvement.
-              """)
+    # Rule 3: High absence
+        if student["StudentAbsenceDays"] == "Above-7":
+            recommendations.append("Provide attendance counseling and mentoring.")
+
+    # Rule 4: Low discussion
+        if student["Discussion"] < 10:
+            recommendations.append("Encourage discussion participation.")
+
+    # Rule 5: Parent involvement
+        if student["ParentAnsweringSurvey"] == "No":
+            recommendations.append("Contact parents to improve engagement.")
+
+    # Display recommendations
+        st.subheader("📘 Personalized Recommendations")
+
+        if recommendations:
+            for rec in recommendations:
+                st.write("•", rec)
+        else:
+            st.success("Student performance is good. No intervention needed.")
 
 # ===============================
 # GPA Prediction Section
