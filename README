@@ -1,89 +1,307 @@
-# AI-Powered Student Performance Monitoring System
+#  AI-Powered Student Support System
 
-An end-to-end machine learning dashboard that identifies **at-risk students**, explains *why* they are at risk using explainable AI (SHAP), analyzes student feedback sentiment, and provides actionable academic recommendations — all through an interactive **Streamlit** interface.
+An end-to-end Machine Learning dashboard that identifies **at-risk students**, explains predictions using **Explainable AI (SHAP)**, analyzes student feedback sentiment, and provides **personalized academic recommendations** through an interactive Streamlit web application.
+
+This system helps educational institutions detect struggling students early and take proactive intervention.
+
+---
+
+# Live Demo
+
+Access the deployed system:
+
+https://yonashabtamucom-ai-student-dashboard-student-dashboard-ukscdt.streamlit.app/
+
+---
+
+#  Project Objectives
+
+The main objectives of this project are:
+
+• Predict students at risk of low academic performance
+• Explain predictions using Explainable AI (SHAP)
+• Provide personalized recommendations
+• Analyze student feedback sentiment using NLP
+• Provide role-based secure dashboard access
+• Deploy the system online
 
 ---
 
 # Features
 
--  **Student Performance Overview**
-  - Dataset exploration and at-risk distribution visualization
--  **At-Risk Student Prediction**
-  - Random Forest classifier to identify low-performing (at-risk) students
--  **Explainable AI (SHAP)**
-  - Feature-level explanations for individual student predictions
--  **Sentiment Analysis**
-  - NLP-based sentiment scoring of student feedback using TextBlob
--  **Academic Recommendations**
-  - Data-driven suggestions to improve engagement and performance
--  **Performance Score Prediction**
-  - Regression model estimating relative performance based on engagement metrics
--  **Academic Chatbot**
-  - Rule-based chatbot for quick insights into student data
+# 1. Secure Login System
+
+* Role-Based Access Control (RBAC)
+* Admin, Instructor, and Student roles
+* Password hashing using bcrypt
+* SQLite database authentication
+
+# 2. Dashboard Overview
+
+* Total student count
+* At-risk student count
+* Model accuracy
+* Student distribution visualization
+
+# 3. At-Risk Student Prediction
+
+* Random Forest Classifier
+* Identifies low-performance students
+* Displays confusion matrix and performance metrics
+
+# 4. Explainable AI (SHAP)
+
+* Explains why a student is at risk
+* Shows feature importance per student
+* Provides transparent AI decisions
+
+# 5. Performance Score Prediction
+
+* Random Forest Regressor
+* Predicts engagement-based performance score
+* Shows MAE and R² score
+
+# 6. Feedback Sentiment Analysis
+
+* NLP using TextBlob
+* Detects positive and negative student feedback
+* Visual sentiment distribution
+
+# 7. Personalized Recommendations
+
+Provides suggestions based on:
+
+* Attendance
+* Participation
+* Engagement level
+* Parent involvement
+
+# 8. Academic Chatbot
+
+* Rule-based chatbot assistant
+* Answers student performance questions
+
+---
+
+#  Machine Learning Models
+
+# Classification Model
+
+Model: Random Forest Classifier
+Purpose: Predict at-risk students
+
+Performance:
+
+Accuracy: 95%
+Precision: 95%
+Recall: 94%
+
+---
+
+# Regression Model
+
+Model: Random Forest Regressor
+Purpose: Predict student performance score
+
+Performance:
+
+MAE: 0.29
+R² Score: 0.69
+
+---
+
+# Dataset
+
+Dataset: xAPI-Edu-Data.csv
+
+Contains:
+
+• Student participation
+• Attendance records
+• Resource usage
+• Academic performance
+
+Total records: 480 students
+
+Target variable:
+
+at_risk
+0 = Safe student
+1 = At-risk student
 
 ---
 
 # System Architecture
 
-Student Dataset
+Dataset
 ↓
-Data Preprocessing & Encoding
+Data Preprocessing
 ↓
-ML Models (Random Forest Classifier & Regressor)
+Machine Learning Models
 ↓
-Explainability (SHAP)
+Explainable AI (SHAP)
 ↓
 Streamlit Dashboard
-
-
----
-
-# Machine Learning Models
-
-# Classification
-- **Model:** Random Forest Classifier  
-- **Target:** At-Risk Students (Low Performance)
-- **Why Random Forest?**
-  - Handles non-linear relationships
-  - Robust to noisy features
-  - Works well on structured educational data
-  - Compatible with SHAP for interpretability
-
-# Regression
-- **Model:** Random Forest Regressor  
-- **Target:** Engagement-based performance score (synthetic)
+↓
+User Interface
 
 ---
 
-# Explainable AI (Why SHAP?)
+#  Tech Stack
 
-Educational predictions impact real students.  
-SHAP provides **transparent, per-student explanations**, ensuring:
-- Trust in predictions
-- Ethical decision support
-- Interpretability for educators
+Frontend:
 
- This system is designed as a **decision-support tool**, not an automated decision-maker.
+* Streamlit
+
+Backend:
+
+* Python
+
+Machine Learning:
+
+* Scikit-learn
+* SHAP
+
+Database:
+
+* SQLite
+* bcrypt authentication
+
+Data Processing:
+
+* Pandas
+* NumPy
+
+Visualization:
+
+* Matplotlib
+* Seaborn
+
+NLP:
+
+* TextBlob
+
+Deployment:
+
+* Streamlit Cloud
+* Docker
+
+Version Control:
+
+* Git & GitHub
 
 ---
 
-##  Tech Stack
+#  Installation (Local Setup)
 
-- **Python**
-- **Streamlit**
-- **Scikit-learn**
-- **SHAP**
-- **Pandas / NumPy**
-- **TextBlob (NLP)**
-- **Matplotlib / Seaborn**
-- **Docker**
-
----
-
-# Installation (Local)
+Clone the repository:
 
 ```bash
-git clone https://github.com/Yonashabtamucom/student-performance-dashboard.git
-cd student-performance-dashboard
+git clone https://github.com/Yonashabtamucom/ai-student-dashboard.git
+cd ai-student-dashboard
+```
+
+Install dependencies:
+
+```bash
 pip install -r requirements.txt
-streamlit run app.py
+```
+
+Run the application:
+
+```bash
+streamlit run student-dashboard.py
+```
+
+---
+
+#  Default Login Credentials
+
+Admin:
+username: admin
+password: admin123
+
+Instructor:
+username: instructor1
+password: instructor123
+
+Student:
+username: student1
+password: student123
+
+---
+
+#  Model Performance Visualization
+
+Includes:
+
+• Confusion Matrix
+• SHAP Feature Importance
+• Sentiment Distribution
+
+---
+
+#  Deployment
+
+Deployed using Streamlit Cloud.
+
+Benefits:
+
+• Online access
+• No installation required
+• Accessible from any device
+
+---
+
+#  Project Structure
+
+```
+ai-student-dashboard/
+│
+├── student-dashboard.py
+├── database.py
+├── requirements.txt
+├── Dockerfile
+├── xAPI-Edu-Data.csv
+├── README.md
+```
+
+---
+
+#  Author
+
+Name: Yonas Habtamu
+Field: Data Science & Cybersecurity
+University: Debre Berhan University
+Internship: Adama Science and Technology University
+
+---
+
+#  Internship Project
+
+This project was developed as part of an internship final project to demonstrate practical application of:
+
+• Machine Learning
+• Explainable AI
+• Dashboard Development
+• AI-based Decision Support Systems
+
+---
+
+#  License
+
+This project is for educational and research purposes.
+
+---
+
+#  Acknowledgment
+
+Thanks to:
+
+• Internship supervisors
+• Adama Science and Technology University
+• Debre Berhan University
+
+---
+
+# END
