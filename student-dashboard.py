@@ -1,8 +1,10 @@
 import os
+import bcrypt
 import streamlit as st
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
+from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import LabelEncoder
 from sklearn.metrics import classification_report, confusion_matrix, mean_absolute_error, r2_score
 import shap
@@ -34,6 +36,7 @@ def login_page():
         else:
 
             st.error("Invalid username or password")
+    hashed = bcrypt.hashpw(password.encode(), bcrypt.gensalt())
 def logout():
 
     st.session_state.user = None
@@ -65,12 +68,13 @@ def register_user():
 # Load Dataset
 # ===============================
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_PATH = os.path.join(BASE_DIR, "xAPI-Edu-Data.csv")
+DATA_PATH = os.path.join(BASE_DIR,"Ethiopian_Student_Dataset.csv")
 df = pd.read_csv(DATA_PATH)
+df.columns = df.columns.str.strip()
 # Define target (Low performance = at-risk)
 df['at_risk'] = (df['Class'] == 'L').astype(int)
 
-# Features and target for dropout classification
+# Features and target for dropout classification  
 X = df.drop(columns=['Class', 'at_risk'])
 y = df['at_risk']
 X = X.rename(columns={
@@ -100,10 +104,12 @@ X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.2, random_state=42
 )
 clf_model = RandomForestClassifier(n_estimators=100, random_state=42)
+lr = LogisticRegression()
+lr.fit(X_train, y_train)
 clf_model.fit(X_train, y_train)
+lr_acc = lr.score(X_test, y_test)
+rf_acc = clf_model.score(X_test, y_test)
 y_pred = clf_model.predict(X_test)
-accuracy = clf_model.score(X_test, y_test)
-
 
 # ===============================
 # Streamlit Setup
@@ -113,8 +119,6 @@ st.set_page_config(
     page_icon="🎓",
     layout="wide"
 )
-
-
 st.markdown("""
 <style>
 .main {
@@ -187,6 +191,13 @@ else:
     # OVERVIEW
     # ===============================
     if choice == "Overview":
+      st.subheader("🤖 Model Performance")
+      st.write("Logistic Regression Accuracy:", lr_acc)
+      st.write("Random Forest Accuracy:", rf_acc)
+      results = pd.DataFrame({
+             "Model": ["Logistic Regression", "Random Forest"],
+             "Accuracy": [lr_acc, rf_acc]})
+      st.table(results)
       st.subheader("📊 Dashboard Overview")
       total_students = len(df)
       at_risk = df['at_risk'].sum()
@@ -196,9 +207,15 @@ else:
       col2.metric("⚠️ At Risk", at_risk)
       col3.metric("✅ Safe Students", safe)
       col4 = st.columns(4)[3]
-      col4.metric("Model Accuracy", f"{accuracy:.2%}")
+      col4.metric("Model Accuracy", f"{rf_acc:.2%}")
       st.markdown("---")
       colA, colB = st.columns([2,1])
+      importances = clf_model.feature_importances_
+      feature_importance = pd.DataFrame({"Feature": X.columns,"Importance": importances}).sort_values(by="Importance", ascending=False)
+      st.subheader("Top Factors Affecting Student Performance")
+      fig, ax = plt.subplots()
+      sns.barplot(x="Importance", y="Feature", data=feature_importance.head(10), ax=ax)
+      st.pyplot(fig)
       with colA:
           st.subheader("Student Distribution")
           fig, ax = plt.subplots()
@@ -226,15 +243,24 @@ else:
 
        st.write("Prediction Metrics on Test Set:")
        st.text(classification_report(y_test, y_pred))
-
+       prob = clf_model.predict_proba(X_test)[:,1]
+       df_results = X_test.copy()
+       df_results["risk_probability"] = prob
+       def risk_label(p):
+           if p < 0.3:
+               return "Low"
+           elif p < 0.7:
+               return "Medium"
+           else:
+               return "High"
+       df_results["risk_level"] = df_results["risk_probability"].apply(risk_label)
+       st.dataframe(df_results.head())
        cm = confusion_matrix(y_test, y_pred)
        fig, ax = plt.subplots()
        sns.heatmap(
            cm, annot=True, fmt='d',
            xticklabels=['Success', 'At-Risk'],
-           yticklabels=['Success', 'At-Risk']
-)
-
+           yticklabels=['Success', 'At-Risk'])
        ax.set_xlabel("Predicted")
        ax.set_ylabel("Actual")
        st.pyplot(fig)
@@ -367,7 +393,7 @@ else:
         absence_map = {'Under-7': 0, 'Above-7': 1}
         df_gpa = df.copy()
         df_gpa['StudentAbsenceDays'] = df_gpa['StudentAbsenceDays'].map(absence_map)
-
+        df = pd.get_dummies(df, columns=['country', 'Grade'], drop_first=True)
     # Map class → GPA
         gpa_map = {'L': 2.0, 'M': 3.0, 'H': 4.0}
         df_gpa['GPA'] = df_gpa['Class'].map(gpa_map)
@@ -414,23 +440,33 @@ else:
         predicted_gpa = reg_model.predict(new_data)[0]
 
         st.success(f"🎓 Predicted GPA: {predicted_gpa:.2f}")
+        st.subheader("Participation vs Performance")
+        fig, ax = plt.subplots()
+        sns.scatterplot(
+            x="raisedhands",
+            y="VisITedResources",
+            hue="Class",
+            data=df,
+            ax=ax)
+        st.pyplot(fig)
+        sns.boxplot(x="StudentAbsenceDays", y="raisedhands", data=df)
 
 # ===============================
 #  Predict New Student
 # ===============================
     elif choice == "Predict New Student":
          st.subheader("🔮 Predict At-Risk Status (New Student)")
-
          input_data = {}
 
     # --- CATEGORICAL FEATURES ---
          input_data["Student Gender"] = st.selectbox("Student Gender",label_encoders["Student Gender"].classes_)
-         input_data["NationalITy"] = st.selectbox("Nationality", label_encoders["NationalITy"].classes_)
-         input_data["PlaceofBirth"] = st.selectbox("Place of Birth", label_encoders["PlaceofBirth"].classes_)
-         input_data["Grade Level"] = st.selectbox( "Grade Level", label_encoders["Grade Level"].classes_)
-         input_data["SectionID"] = st.selectbox("Section", label_encoders["SectionID"].classes_)
-         input_data["StageID"] = st.selectbox("Education Stage",label_encoders["StageID"].classes_)
-         input_data["Course Topic"] = st.selectbox("Course Topic", label_encoders["Course Topic"].classes_)
+         input_data["country"] = st.selectbox("Country",label_encoders["country"].classes_)
+
+         input_data["Grade"] = st.selectbox("Grade",label_encoders["Grade"].classes_)
+         input_data["city"] = st.selectbox("city", label_encoders["city"].classes_)
+         input_data["Section"] = st.selectbox( "Section", label_encoders["Section"].classes_)
+         input_data["school level"] = st.selectbox("Education Stage",label_encoders["school level"].classes_)
+         input_data["subject"] = st.selectbox("subject", label_encoders["subject"].classes_)
          input_data["Semester"] = st.selectbox("Semester", label_encoders["Semester"].classes_)
          input_data["Relation"] = st.selectbox( "Guardian Relation", label_encoders["Relation"].classes_)
          input_data["Parent Survey Response"] = st.selectbox("Parent Survey Response",label_encoders["Parent Survey Response"].classes_)
@@ -441,10 +477,9 @@ else:
          input_data["Learning Resources Visited"] = st.slider("Resources Visited", 0, 100, 30)
          input_data["Announcements Viewed"] = st.slider("Announcements Viewed", 0, 100, 15)
          input_data["Discussion Participation"] = st.slider("Discussion Participation", 0, 100, 10)
-
-    # Convert to DataFrame
+     # Convert to DataFrame
          new_df = pd.DataFrame([input_data])
-            # Encode categorical inputs using saved encoders
+     # Encode categorical inputs using saved encoders
          for col in categorical_cols:
              if col in new_df.columns:
                  new_df[col] = label_encoders[col].transform(new_df[col])
@@ -457,7 +492,17 @@ else:
 
          st.write("Prediction:", "⚠️ At-Risk" if prediction == 1 else "✅ Not At-Risk")
          st.write(f"Probability of At-Risk: {probability:.2f}")
-   
+         probability = clf_model.predict_proba(new_df)[0][1]
+
+         if probability < 0.3:
+            risk_level = "🟢 Low Risk"
+         elif probability < 0.7:
+            risk_level = "🟡 Medium Risk"
+         else:
+            risk_level = "🔴 High Risk"
+
+         st.write("Risk Level:", risk_level)
+
    ####      Register User
          
     elif choice == "Register User":
@@ -476,6 +521,11 @@ else:
         user_input = st.text_input("Ask something about student performance:")
 
     # ---- Intent Detection Function ----
+        from textblob import TextBlob
+        analysis = TextBlob(user_input)
+        sentiment = analysis.sentiment.polarity
+        if sentiment < 0:
+            st.write("It seems the feedback is negative. The system recommends academic support.")
         def detect_intent_nlp(text):
             text = text.lower()
 
@@ -504,20 +554,16 @@ else:
            elif intent == "recommendation":
                st.write(
                   "Students should increase engagement, use learning resources more, "
-                  "and reduce absenteeism."
-            )
-
+                  "and reduce absenteeism.")
            elif intent == "data":
                 st.dataframe(df.head())
-
            elif intent == "gpa":
               st.write(
                 "GPA prediction uses engagement metrics such as raised hands, "
-                "resource visits, discussions, and attendance."
-            )
-
+                "resource visits, discussions, and attendance.")
            else:
                st.write(
                   "I can help with at-risk students, GPA prediction, "
-                  "recommendations, or dataset insights."
-            )
+                  "recommendations, or dataset insights.")
+        if "why" in user_input:
+            st.write("Students become at-risk mainly due to high absence and low participation.")
