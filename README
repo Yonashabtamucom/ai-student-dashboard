@@ -4,17 +4,13 @@ An end-to-end Machine Learning dashboard that identifies **at-risk students**, e
 
 This system helps educational institutions detect struggling students early and take proactive intervention.
 
----
-
 ## Live Demo
 
 Access the deployed system:
 
 https://yonashabtamucom-ai-student-dashboard-student-dashboard-ukscdt.streamlit.app/
 
----
-
-# # Project Objectives
+## Project Objectives
 
 The main objectives of this project are:
 
@@ -24,8 +20,6 @@ The main objectives of this project are:
 • Analyze student feedback sentiment using NLP
 • Provide role-based secure dashboard access
 • Deploy the system online
-
----
 
 ## Features
 
@@ -81,8 +75,6 @@ Provides suggestions based on:
 * Rule-based chatbot assistant
 * Answers student performance questions
 
----
-
 ##  Machine Learning Models
 
 ## Classification Model
@@ -91,12 +83,9 @@ Model: Random Forest Classifier
 Purpose: Predict at-risk students
 
 Performance:
-
 Accuracy: 95%
 Precision: 95%
 Recall: 94%
-
----
 
 ## Regression Model
 
@@ -107,8 +96,6 @@ Performance:
 
 MAE: 0.29
 R² Score: 0.69
-
----
 
 ## Dataset
 
@@ -128,9 +115,6 @@ Target variable:
 at_risk
 0 = Safe student
 1 = At-risk student
-
----
-
 ## System Architecture
 
 Dataset
@@ -144,8 +128,6 @@ Explainable AI (SHAP)
 Streamlit Dashboard
 ↓
 User Interface
-
----
 
 ##  Tech Stack
 
@@ -190,8 +172,6 @@ Version Control:
 
 * Git & GitHub
 
----
-
 ## Installation (Local Setup)
 
 Clone the repository:
@@ -213,8 +193,6 @@ Run the application:
 streamlit run student-dashboard.py
 ```
 
----
-
 ##  Default Login Credentials
 
 Admin:
@@ -229,8 +207,6 @@ Student:
 username: student1
 password: student123
 
----
-
 ##  Model Performance Visualization
 
 Includes:
@@ -238,8 +214,6 @@ Includes:
 • Confusion Matrix
 • SHAP Feature Importance
 • Sentiment Distribution
-
----
 
 ##  Deployment
 
@@ -250,8 +224,6 @@ Benefits:
 • Online access
 • No installation required
 • Accessible from any device
-
----
 
 ##  Project Structure
 
@@ -275,8 +247,6 @@ Field: Data Science & Cybersecurity
 University: Debre Berhan University
 Internship: Adama Science and Technology University
 
----
-
 ##  Internship Project
 
 This project was developed as part of an internship final project to demonstrate practical application of:
@@ -286,13 +256,10 @@ This project was developed as part of an internship final project to demonstrate
 • Dashboard Development
 • AI-based Decision Support Systems
 
----
-
 ##  License
 
 This project is for educational and research purposes.
 
----
 
 ##  Acknowledgment
 
@@ -301,7 +268,5 @@ Thanks to:
 • Internship supervisors
 • Adama Science and Technology University
 • Debre Berhan University
-
----
 
 ## END
