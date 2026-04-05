@@ -1,4 +1,4 @@
-#  AI-Powered Student Support System
+##  AI-Powered Student Support System
 
 An end-to-end Machine Learning dashboard that identifies **at-risk students**, explains predictions using **Explainable AI (SHAP)**, analyzes student feedback sentiment, and provides **personalized academic recommendations** through an interactive Streamlit web application.
 
@@ -6,7 +6,7 @@ This system helps educational institutions detect struggling students early and 
 
 ---
 
-# Live Demo
+## Live Demo
 
 Access the deployed system:
 
@@ -14,7 +14,7 @@ https://yonashabtamucom-ai-student-dashboard-student-dashboard-ukscdt.streamlit.
 
 ---
 
-#  Project Objectives
+# # Project Objectives
 
 The main objectives of this project are:
 
@@ -27,47 +27,47 @@ The main objectives of this project are:
 
 ---
 
-# Features
+## Features
 
-# 1. Secure Login System
+## 1. Secure Login System
 
 * Role-Based Access Control (RBAC)
 * Admin, Instructor, and Student roles
 * Password hashing using bcrypt
 * SQLite database authentication
 
-# 2. Dashboard Overview
+## 2. Dashboard Overview
 
 * Total student count
 * At-risk student count
 * Model accuracy
 * Student distribution visualization
 
-# 3. At-Risk Student Prediction
+## 3. At-Risk Student Prediction
 
 * Random Forest Classifier
 * Identifies low-performance students
 * Displays confusion matrix and performance metrics
 
-# 4. Explainable AI (SHAP)
+## 4. Explainable AI (SHAP)
 
 * Explains why a student is at risk
 * Shows feature importance per student
 * Provides transparent AI decisions
 
-# 5. Performance Score Prediction
+## 5. Performance Score Prediction
 
 * Random Forest Regressor
 * Predicts engagement-based performance score
 * Shows MAE and R² score
 
-# 6. Feedback Sentiment Analysis
+## 6. Feedback Sentiment Analysis
 
 * NLP using TextBlob
 * Detects positive and negative student feedback
 * Visual sentiment distribution
 
-# 7. Personalized Recommendations
+## 7. Personalized Recommendations
 
 Provides suggestions based on:
 
@@ -76,16 +76,16 @@ Provides suggestions based on:
 * Engagement level
 * Parent involvement
 
-# 8. Academic Chatbot
+## 8. Academic Chatbot
 
 * Rule-based chatbot assistant
 * Answers student performance questions
 
 ---
 
-#  Machine Learning Models
+##  Machine Learning Models
 
-# Classification Model
+## Classification Model
 
 Model: Random Forest Classifier
 Purpose: Predict at-risk students
@@ -98,7 +98,7 @@ Recall: 94%
 
 ---
 
-# Regression Model
+## Regression Model
 
 Model: Random Forest Regressor
 Purpose: Predict student performance score
@@ -110,7 +110,7 @@ R² Score: 0.69
 
 ---
 
-# Dataset
+## Dataset
 
 Dataset: xAPI-Edu-Data.csv
 
@@ -131,7 +131,7 @@ at_risk
 
 ---
 
-# System Architecture
+## System Architecture
 
 Dataset
 ↓
@@ -147,7 +147,7 @@ User Interface
 
 ---
 
-#  Tech Stack
+##  Tech Stack
 
 Frontend:
 
@@ -192,7 +192,7 @@ Version Control:
 
 ---
 
-#  Installation (Local Setup)
+## Installation (Local Setup)
 
 Clone the repository:
 
@@ -215,7 +215,7 @@ streamlit run student-dashboard.py
 
 ---
 
-#  Default Login Credentials
+##  Default Login Credentials
 
 Admin:
 username: admin
@@ -231,7 +231,7 @@ password: student123
 
 ---
 
-#  Model Performance Visualization
+##  Model Performance Visualization
 
 Includes:
 
@@ -241,7 +241,7 @@ Includes:
 
 ---
 
-#  Deployment
+##  Deployment
 
 Deployed using Streamlit Cloud.
 
@@ -253,7 +253,7 @@ Benefits:
 
 ---
 
-#  Project Structure
+##  Project Structure
 
 ```
 ai-student-dashboard/
@@ -268,7 +268,7 @@ ai-student-dashboard/
 
 ---
 
-#  Author
+##  Author
 
 Name: Yonas Habtamu
 Field: Data Science & Cybersecurity
@@ -277,7 +277,7 @@ Internship: Adama Science and Technology University
 
 ---
 
-#  Internship Project
+##  Internship Project
 
 This project was developed as part of an internship final project to demonstrate practical application of:
 
@@ -288,13 +288,13 @@ This project was developed as part of an internship final project to demonstrate
 
 ---
 
-#  License
+##  License
 
 This project is for educational and research purposes.
 
 ---
 
-#  Acknowledgment
+##  Acknowledgment
 
 Thanks to:
 
@@ -304,4 +304,4 @@ Thanks to:
 
 ---
 
-# END
+## END
